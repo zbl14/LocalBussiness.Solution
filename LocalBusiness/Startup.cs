@@ -64,7 +64,8 @@ namespace LocalBusiness
                         IssuerSigningKey = new SymmetricSecurityKey(key)
                     };
                 });
-            
+            services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -83,9 +84,7 @@ namespace LocalBusiness
                     {
                         Name = "No license requied"
                     }
-                });
-
-                services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();
+                });               
             });
         }
 
