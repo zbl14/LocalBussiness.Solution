@@ -27,6 +27,16 @@ namespace LocalBusiness
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(opt =>
+            {
+                opt.AddDefaultPolicy(builder =>
+                    {
+                        builder.WithOrigins("https://localhost:5001", "http://localhost:5000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+            
             services.AddDbContext<LocalBusinessContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             services.AddControllers();
@@ -72,6 +82,8 @@ namespace LocalBusiness
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
