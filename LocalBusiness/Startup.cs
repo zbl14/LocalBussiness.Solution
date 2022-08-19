@@ -53,7 +53,7 @@ namespace LocalBusiness
                 })
                 .AddJwtBearer(o =>
                 {
-                    var Key = Encoding.UTF8.GetBytes(Configuration["JWT:Key"]);
+                    var key = Encoding.UTF8.GetBytes(Configuration["JWT:Key"]);
                     o.SaveToken = true;
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -61,9 +61,7 @@ namespace LocalBusiness
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        // ValidIssuer = Configuration["JWT:Issuer"],
-                        // ValidAudience = Configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Key)
+                        IssuerSigningKey = new SymmetricSecurityKey(key)
                     };
                 });
             

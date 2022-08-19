@@ -8,7 +8,7 @@ namespace LocalBusiness.Repository
 {
    public interface IJWTManagerRepository
     {
-        Tokens Authenticate(Users users); 
+        Tokens Authenticate(Users user); 
     }
    
 }

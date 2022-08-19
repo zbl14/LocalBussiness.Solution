@@ -18,7 +18,7 @@ namespace LocalBusiness.Controllers
 
     public UsersController(IJWTManagerRepository jWTManager)
     {
-      this._jWTManager = jWTManager;
+      _jWTManager = jWTManager;
     }
 
     [HttpGet]

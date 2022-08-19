@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LocalBusiness.Migrations
 {
     [DbContext(typeof(LocalBusinessContext))]
-    [Migration("20220819193311_JWTToken")]
+    [Migration("20220819203513_JWTToken")]
     partial class JWTToken
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
