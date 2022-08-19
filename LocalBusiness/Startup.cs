@@ -25,16 +25,29 @@ namespace LocalBusiness
 
         public IConfiguration Configuration { get; }
         
-
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<LocalBusinessContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LocalBusiness", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "LocalBusiness", 
+                    Version = "v1",
+                    Description = "An ASP.NET Core Web API for local business",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Zhibin Liang",
+                        Email = "ifthereisoneday@gmail.com",
+                        Url = new Uri("https://www.linkedin.com/in/zhibin-liang"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "No license requied"
+                    }
+                });
             });
         }
 
@@ -44,9 +57,17 @@ namespace LocalBusiness
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LocalBusiness v1"));
             }
+
+            app.UseSwagger(c => 
+            {
+                c.SerializeAsV2 = true;
+            });
+            app.UseSwaggerUI(c => 
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "LocalBusiness v1");
+                c.RoutePrefix = string.Empty;
+            });
 
             //app.UseHttpsRedirection();
 
