@@ -2,14 +2,16 @@
 using LocalBusiness.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LocalBusiness.Migrations
 {
     [DbContext(typeof(LocalBusinessContext))]
-    partial class LocalBusinessContextModelSnapshot : ModelSnapshot
+    [Migration("20220819170135_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
