@@ -13,6 +13,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using LocalBusiness.Models;
+using LocalBusiness.Repository;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+
 
 namespace LocalBusiness
 {
@@ -39,6 +44,29 @@ namespace LocalBusiness
             
             services.AddDbContext<LocalBusinessContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
+            
+            services
+                .AddAuthentication(opt =>
+                {
+                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(o =>
+                {
+                    var Key = Encoding.UTF8.GetBytes(Configuration["JWT:Key"]);
+                    o.SaveToken = true;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        // ValidIssuer = Configuration["JWT:Issuer"],
+                        // ValidAudience = Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Key)
+                    };
+                });
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -58,6 +86,8 @@ namespace LocalBusiness
                         Name = "No license requied"
                     }
                 });
+
+                services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();
             });
         }
 
@@ -85,6 +115,7 @@ namespace LocalBusiness
 
             app.UseCors();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
