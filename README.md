@@ -6,10 +6,10 @@
 
 ---
 ## Table of Contents
-[Technologies Used](#technologies-used)
+[Technologies Used](#technologies-used)  
 [Description](#description)  
 [Setup/Installation Requirements](#setup-and-installation-requirements)
-[API Documentation](#api-documentation)
+[API Documentation](#api-documentation)  
 [Known Bugs](#known-bugs)  
 [License](#License)
 
