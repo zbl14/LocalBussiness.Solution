@@ -6,7 +6,7 @@
 
 ---
 ## Table of Contents
-[Technologies Used](#technologies-used)  
+[Technologies Used](#technologies-used)
 [Description](#description)  
 [Setup/Installation Requirements](#setup-and-installation-requirements)
 [API Documentation](#api-documentation)
@@ -155,7 +155,7 @@ http://localhost:5000/api/businesses/?name=Duke%20Bakery
 ```
 
 ## Sample JSON Response
-```
+```json
 [
     {
         "businessId": 3,
