@@ -6,6 +6,8 @@ using LocalBusiness.Models;
 using System.Linq;
 using LocalBusiness.Wrappers;
 using LocalBusiness.Filter;
+using LocalBusiness.Services;
+using LocalBusiness.Helpers;
 
 namespace LocalBusiness.Controllers
 {
@@ -14,10 +16,12 @@ namespace LocalBusiness.Controllers
   public class BusinessesController : ControllerBase
   {
     private readonly LocalBusinessContext _db;
+    private readonly IUriService _uriService;
 
-    public BusinessesController(LocalBusinessContext db)
+    public BusinessesController(LocalBusinessContext db, IUriService uriService)
     {
       _db = db;
+      _uriService = uriService;
     }
 
     [HttpGet]
@@ -44,7 +48,8 @@ namespace LocalBusiness.Controllers
       {
         query = query.Where(entry => entry.Address == address);
       }
-             
+
+      var route = Request.Path.Value;  
       var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);  
       var pagedData = await query
         .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
@@ -53,9 +58,9 @@ namespace LocalBusiness.Controllers
       
       var totalRecords = await _db.Business.CountAsync();
       
-      var response = new PagedResponse<List<Business>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
+      var pagedResponse = PaginationHelper.CreatePagedReponse<Business>(pagedData, validFilter, totalRecords, _uriService, route);
 
-      return Ok(response);
+      return Ok(pagedResponse);
     }
 
     [HttpGet("{id}")]

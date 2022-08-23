@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using LocalBusiness.Models;
@@ -17,6 +13,7 @@ using LocalBusiness.Repository;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using LocalBusiness.Services;
 
 
 namespace LocalBusiness
@@ -65,6 +62,15 @@ namespace LocalBusiness
                     };
                 });
             services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();
+            
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IUriService>(o =>
+            {
+                var accessor = o.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(uri);
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
