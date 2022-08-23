@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LocalBusiness.Controllers
 {
-  [Route("api/[controller]")]
+  [Route("api/v{version:apiVersion}/[controller]")]
+  [ApiVersion("2.0")]
   [ApiController]
   [Authorize]
   public class UsersController : ControllerBase
