@@ -98,7 +98,7 @@ To explore LocalBusiness API with Swagger/Swashbuckle, launch the project using 
 
 ### Using the JSON Web Token
 
-* Make a POST call to the following endpoint ```http://localhost:5000/api/users/authenticate``` with Postman
+* Make a POST call to the following endpoint ```http://localhost:5000/api/v2/users/authenticate``` with Postman
 * The body of the API call will look like below code. Replace [username] and [password] with predefined username and password
     ```json
     {
