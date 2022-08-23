@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using LocalBusiness.Models;
 using System.Linq;
 using LocalBusiness.Wrappers;
+using LocalBusiness.Filter;
 
 namespace LocalBusiness.Controllers
 {
@@ -20,7 +21,7 @@ namespace LocalBusiness.Controllers
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(string name, string type, string phone, string address)
+    public async Task<IActionResult> Get([FromQuery] PaginationFilter filter, string name, string type, string phone, string address)
     {
       IQueryable<Business> query = _db.Business.AsQueryable();
 
@@ -43,8 +44,17 @@ namespace LocalBusiness.Controllers
       {
         query = query.Where(entry => entry.Address == address);
       }
+             
+      var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);  
+      var pagedData = await query
+        .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+        .Take(validFilter.PageSize)
+        .ToListAsync();
+      
+      var totalRecords = await _db.Business.CountAsync();
+      
+      var response = new PagedResponse<List<Business>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
 
-      var response = await query.ToListAsync();
       return Ok(response);
     }
 
