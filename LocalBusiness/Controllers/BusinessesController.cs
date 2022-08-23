@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LocalBusiness.Models;
 using System.Linq;
+using LocalBusiness.Wrappers;
 
 namespace LocalBusiness.Controllers
 {
@@ -19,7 +20,7 @@ namespace LocalBusiness.Controllers
     }
 
     [HttpGet]
-    public async Task<List<Business>> Get(string name, string type, string phone, string address)
+    public async Task<IActionResult> Get(string name, string type, string phone, string address)
     {
       IQueryable<Business> query = _db.Business.AsQueryable();
 
@@ -43,7 +44,8 @@ namespace LocalBusiness.Controllers
         query = query.Where(entry => entry.Address == address);
       }
 
-      return await query.ToListAsync();
+      var response = await query.ToListAsync();
+      return Ok(response);
     }
 
     [HttpGet("{id}")]
@@ -56,7 +58,7 @@ namespace LocalBusiness.Controllers
         return NotFound();
       }
 
-      return business;
+      return Ok(new Response<Business>(business));
     }
 
     [HttpPut("{id}")]
